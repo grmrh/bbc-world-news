@@ -1,17 +1,41 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const bodyParser = require("body-parser");
+const exphbs = require("express-handlebars");
+const helpers = require("handlebars-helpers");         //(['array', 'comparison', 'date', 'html', 'string']);
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require("mongoose");
+const request = require("request");
+const cheerio = require("cheerio");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+
+const app = express();
+const hbsEngine = exphbs.create({
+  extname: "hbs",
+  defaultLayout: "main.hbs",
+  helpers: {
+    array: helpers.array(),
+    comparison: helpers.comparison(), 
+    date: helpers.date(),
+    html: helpers.html(),
+    string: helpers.string()
+  },
+  partialsDir: ['views/partials']
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.engine("hbs", hbsEngine.engine);
+app.set("view engine", "hbs");
+
+// parse application/x-www-form-urlencoded and application/json
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -37,5 +61,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// database setup
+const db = require('./models');
+mongoose.connect("mongodb://localhost/BbcArticles")
 
 module.exports = app;
