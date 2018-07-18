@@ -11,7 +11,7 @@ const request = require("request");
 const cheerio = require("cheerio");
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const articlesRouter = require('./routes/articles');
 
 
 const app = express();
@@ -44,7 +44,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/articles', articlesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
