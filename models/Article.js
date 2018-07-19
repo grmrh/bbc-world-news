@@ -10,13 +10,18 @@ const ArticleSchema = new Schema({
     required: true}, 
   summary: {
     type: String,
-    required: true},
+    required: false},
   link: {
     type: String,
-    required: true},
+    required: true,
+    unique: true},
   img: {
     type: String,
     required: false},
+  dateInserted: {
+    type: Date,
+    default: Date.now
+  },
 
   /**
    * `comment` is an object that stores a Comment id. The ref property links the ObjectId to the Comment model
