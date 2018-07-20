@@ -10,8 +10,6 @@ const mongoose = require("mongoose");
 const request = require("request");
 const cheerio = require("cheerio");
 
-const indexRouter = require('./routes/index');
-const articlesRouter = require('./routes/articles');
 
 
 const app = express();
@@ -43,8 +41,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/articles', articlesRouter);
+const indexRouter = require('./routes/index');
+//const articlesRouter = require('./routes/articles');
+
+app.use(indexRouter);
+// app.use('/', indexRouter);
+// app.use('/scrape', indexRouter);
+//app.use('/articles', articlesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
