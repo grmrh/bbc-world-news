@@ -27,60 +27,61 @@ export_articles.articleByIdWithComment = function (req, res) {
 
 // scrape articles from BBC World News
 export_articles.scrapeArticles = function (req, res) {
-    axios.get("https://www.bbc.com/news/world")
-      .then(function (response) {
 
-        // load the response into cheerio and save it to $ for a shorthand selector
-        const $ = cheerio.load(response.data);
+  axios.get("https://www.bbc.com/news/world")
+    .then(function (response) {
 
-        // // then grab what we need
-        // $('.title-link').each((i, element) => {
-        //   const result = {};
-        //   result.link = $(this).attr('href');
-        //   result.title = $(this).find('.title-link__title-text').text();
-        //   result.summary = $(this).find()
-        // })
+      // load the response into cheerio and save it to $ for a shorthand selector
+      const $ = cheerio.load(response.data);
+
+      // console.log('link \n', $('.pigeon__column.pigeon__colmun--a  a').attr('href'));
+      // console.log('title \n', $('.pigeon__column.pigeon__colmun--a  a > h3 > span').text());
+      // console.log('img \n', $('.pigeon__column.pigeon__colmun--a img').attr('datasrc'));    
+      // console.log('summary \n', $('.pigeon__column.pigeon__colmun--a p').text());
+      // console.log('imagea \n', $('.pigeon-item__image').children('img').attr('datasrc'))
+
 // scrape method 1
-        // $('a.title-link').each(function (i, element) {
-        //   var result = {};
-        //   result.link = $(this).attr('href').trim();
-        //   if (result.link.startsWith('/news/world-')) {
-        //     result.headline = $(this, 'span.title-link__title-text').text().replace('\n', '').trim();
-        //     result.summary = $(this).siblings('p.pigeon-item__summary') ? $(this).siblings('p.pigeon-item__summary').text().trim() : '';
+      let result= {};
+      result.link = $('.buzzard-item > a').attr('href');
+      result.headline = $('.buzzard-item > a > h3 > span').text();
+      result.summary = $('.buzzard-item p').text();
+      result.img = $('.buzzard-item img').attr('src');
 
-        //     console.log(result);
-        //     // create and insert Article to database
-        //     db.Article.create(result)
-        //       .then(articleCreated => console.log(articleCreated))
-        //       .catch(err => res.json(err));
-        //   }
-        // })
+      console.log('link ', result.link);
+      console.log('headline ', result.headline);
+      console.log('img ', result.img);    
+      console.log('summary ', result.summary);
 
-// scrape method 2
-        $('a.title-link').each(function (i, element) {
-          var result = {};
-          console.log('img \n', $('.buzzard-item img').attr('src'));
+      //insert to database
+      db.Article.create(result)
+        .then(articleCreated => console.log(articleCreated))
 
-          result.img = $(this).parents().siblings('div.pigeon-item__image').children('img').attr('src');
-          result.link = $(this).attr('href').trim();
-          if (result.link.startsWith('/news/world-')) {
-            result.headline = $(this, 'span.title-link__title-text').text().replace('\n', '').trim();
-            result.summary = $(this).siblings('p.pigeon-item__summary') ? $(this).siblings('p.pigeon-item__summary').text().trim() : '';
+      $('a.title-link').each(function (i, element) {
+        let result = {};
+        result.link = $(this).attr('href');
+        if (result.link.startsWith('/news/world-')) {
+          //result.headline = $(this).children('span.title-link__title-text').text();
+          result.headline = $(this, 'span.title-link__title-text').text().trim();
+          //result.headline = $(this).children('span').text();
+          result.summary = $(this).siblings('p.pigeon-item__summary') ? $(this).siblings('p.pigeon-item__summary').text() : '';
+          result.img = $(this).parent().siblings('div.pigeon-item__image').children('img').attr('datasrc');
 
-            console.log(result);
-            // create and insert Article to database
-            db.Article.create(result)
-              .then(articleCreated => console.log(articleCreated))
-              .catch(err => res.json(err));
-          }
-        })
-
+          console.log(result);
+          // create and insert Article to database
+          db.Article.create(result)
+            .then(articleCreated => console.log(articleCreated))
+            //.catch(err => res.json(err));
+        }
       })
-      // .then((req, res) => {
 
-      //     // scraped and saved articles successfully, let the client know
-      //     //res.send("Scrape completed");
-      //   })
-      }
+    // .then((req, res) => {
+
+    //     // scraped and saved articles successfully, let the client know
+    //     //res.send("Scrape completed");
+    //   })
+    })
+
+}
+
 
     module.exports = export_articles;
