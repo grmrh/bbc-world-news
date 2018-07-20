@@ -6,11 +6,32 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const export_articles = module.exports = {};
 
+// initial page
+export_articles.landingPage = function(req, res) {
+
+  let hbsObj = {article: [{}]};
+  res.render('index', hbsObj);
+
+  // db.Article.find({})
+  //   .then(articles => {
+  //     //console.log('controllers allArticles \n', articles);
+  //     let hbsObj = {articles: articles};
+  //     console.log('controllers landing page \n', hbsObj);
+  //     res.render('index', hbsObj)})
+  //   .catch(err => res.json(err));
+}
+
 //get all articles
 export_articles.allArticles = function (req, res) {
 
   db.Article.find({})
-    .then(dbArticle => res.json(dbArticle))
+    .then(dbArticle => {
+      //console.log('controllers allArticles \n', articles);
+      let hbsObj = {articles: dbArticle};
+      console.log('controllers allArticles \n', hbsObj);
+      res.json(hbsObj);
+      // res.render('index', hbsObj);
+    })
     .catch(err => res.json(err));
 }
 
@@ -74,14 +95,13 @@ export_articles.scrapeArticles = function (req, res) {
         }
       })
 
-    // .then((req, res) => {
+    .then((req, res) => {
 
-    //     // scraped and saved articles successfully, let the client know
-    //     //res.send("Scrape completed");
-    //   })
+        // scraped and saved articles successfully, let the client know
+        //res.send("Scrape completed");
+      })
     })
 
 }
 
-
-    module.exports = export_articles;
+module.exports = export_articles;

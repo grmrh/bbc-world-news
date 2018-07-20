@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const request = require("request");
 const cheerio = require("cheerio");
 
-
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 const hbsEngine = exphbs.create({
@@ -41,12 +41,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const indexRouter = require('./routes/index');
-//const articlesRouter = require('./routes/articles');
+//const articlesRoute = require('./routes/articles_route');
+const routes = require('./routes/index');
 
-app.use(indexRouter);
-// app.use('/', indexRouter);
-// app.use('/scrape', indexRouter);
+app.use('/', routes);
+app.use('/articles', routes);
+
+//app.use('/', articlesRoute);
+// app.use('/', articlesRoute);
+// app.use('/scrape', articlesRoute);
 //app.use('/articles', articlesRouter);
 
 // catch 404 and forward to error handler
@@ -68,5 +71,11 @@ app.use(function(err, req, res, next) {
 // database setup
 const db = require('./models');
 mongoose.connect("mongodb://localhost/BbcArticles")
+
+// start the server
+app.listen(PORT, function() {
+  console.log("App running on port " + PORT + "!");
+});
+
 
 module.exports = app;

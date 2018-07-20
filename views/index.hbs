@@ -1,28 +1,48 @@
-<!-- Header -->
-<header class="masthead">
-  <div class="container">
-    <div class="intro-text">
-      <div class="intro-lead-in">Welcome To BBC World News!</div>
-      <div class="intro-heading text-uppercase">Leave your opinion</div>
-      <button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger grab-articles">Grab articles</button>
-    </div>
-  </div>
-</header>
-
-<!-- Article Grid -->
-<section class="bg-light" id="article">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <h2 class="section-heading text-uppercase">Articles</h2>
-        <h3 class="section-subheading text-muted">Current top news world-wide</h3>
+<div>
+  <!-- Header -->
+  <header class="masthead">
+    <div class="container">
+      <div class="intro-text">
+        <div class="intro-lead-in">Welcome To BBC World News!</div>
+        <div class="intro-heading text-uppercase">Leave your opinion</div>
+        <button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger grab-articles">Grab articles</button>
+        <label class="text-center">{{link}}</label>
       </div>
     </div>
-    <div class="row" id="articles-in-grid">
-      {{#each articles}}
-        {{> partials/article_partial }}
-      {{/each}}
-    </div>
-  </div>
+  </header>
 
-</section>
+  <!-- Article Grid -->
+  <section class="bg-light" >
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Articles</h2>
+          <h3 class="section-subheading text-muted">Current top news world-wide</h3>
+        </div>
+      </div>
+      <div class="row" id="articles-in-grid">
+        {{#each articles}}{{log articles}}
+        <div class="col-md-4 col-sm-6 portfolio-item">
+          <a class="portfolio-link" data-toggle="modal" href={{this.link}}>
+            <div class="portfolio-hover">
+              <div class="portfolio-hover-content">
+                <i class="fa fa-plus fa-3x"></i>
+              </div>
+            </div>
+            {{#if this.img }}
+            <img class="img-fluid" src={{this.img}} alt="">
+            {{/if}}
+          </a>
+          <div class="portfolio-caption">
+            <h4>{{this.headline}}</h4>
+            <p class="text-small">{{this.summary}}</p>
+          </div>
+        </div>
+        {{!-- {{> partials/index_partial }} --}} 
+        {{/each}}
+      </div>
+    </div>
+
+  </section>
+
+</div>
