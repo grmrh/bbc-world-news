@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const CommentSchema = new Schema({
   content: {
     type: String,
-    required: false
+    required: false,
+    index: true
   }
 });
 

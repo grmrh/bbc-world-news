@@ -7,7 +7,8 @@ const Schema = mongoose.Schema;
 const ArticleSchema = new Schema({
   headline: {
     type: String,
-    required: true}, 
+    required: true,
+    index: true}, 
   summary: {
     type: String,
     required: true},
